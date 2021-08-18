@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Pyscript Tags Analyzer{% endblock title %}
+
+{% block active %} active{% endblock active %}
+
+{% block content %}
+<div class="col-md-8 p-4 text-white">       
+    <h4 class="fst-italic">Live Covid Updates - State Wise</h4>
+   
+    <hr class="bg-light">
+    <h1 class="display-4 fst-italic">Enter Location</h1>
+
+    <form action="/search" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="search"></label>
+            <input type="search" class="form-control" id="search" name='search' value="{{request.GET.search}}" placeholder="Search..........">
+        </div>
+        <button type="submit" class="btn btn-primary">Get Result</button>
+    </form> 
+    
+ 
+   <div class="container">
+    {% if html_code %}
+    <div class="col-sm-10 mt-5 ml-2 mb-4">
+      <h1 style="font-family:'Comic Sans MS';"><center>{{state_name}}</center></h1>
+    </div>
+    <div class="col-sm-10 mt-4 ml-2" id = "state_map">
+      {{html_code|safe}}
+    </div>
+    {% endif %}
+   </div>
+
+   <div class="col-sm-6">
+    {% if img_name %}
+    <table class="table table-striped" style="margin-top:30px;margin-left:120px;">
+      <thead>
+        <tr>
+          <th>Confirmed</th>
+          <th>Recovered</th>
+          <th>Death</th>
+          <th>Active</th>
+        </tr>
+      </thead>
+      <tbody>
+         {% for key,value in total_state_data.iterrows %}
+        <tr>
+          <td>{{value.cf_Confirmed}}</td>
+          <td>{{value.cf_Recovered}}</td>
+          <td>{{value.cf_Deceased}}</td>
+          <td>{{value.cf_Active}}</td>
+        </tr>
+        {% endfor %}
+     </tbody>
+   </table>
+    <img src="../../static/images/output.png" alt="not found" width="1000px">
+    {% endif %}
+  </div>
+ 
+ </div>
+{% endblock content %}
+
